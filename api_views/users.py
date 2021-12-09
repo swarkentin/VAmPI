@@ -20,16 +20,18 @@ def get_all_users():
     return return_value
 
 
-def get_all_users_v2(query):
+def get_all_users_v2(query=""):
     """
     Command Injection likely by including text that has not been sanitized directly in
     a shell script.
+
+    query: Allow for custom filtering using any command line, such as  "| grep mail"
     """
-    cmd = "grep {0} database/users.json".format(query)
-    p = subprocess.Popen(["/bin/bash", "-m", "-c", cmd], stdout=subprocess.PIPE)
+    cmd = "cat database/users.json {0}".format(query)
+    p = subprocess.Popen(["/bin/bash", "-c", cmd], stdout=subprocess.PIPE)
     out, err = p.communicate()
 
-    return str(out)
+    return out.decode('UTF-8')
 
 
 def debug():

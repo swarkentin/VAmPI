@@ -51,7 +51,7 @@ paths:
         200:
           description: See all details of the users
           content: {}
-  /users/v2/{query}:
+  /users/v2:
     get:
       tags:
       - v2
@@ -61,9 +61,8 @@ paths:
       operationId: api_views.users.get_all_users_v2
       parameters:
         - name: query
-          in: path
+          in: query
           description: filter the list of users with this query
-          required: true
           schema:
             type: string
       responses:
