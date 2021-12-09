@@ -1,4 +1,6 @@
 import re
+import subprocess
+
 import jsonschema
 import jwt
 
@@ -16,6 +18,18 @@ def error_message_helper(msg):
 def get_all_users():
     return_value = jsonify({'users': User.get_all_users()})
     return return_value
+
+
+def get_all_users_v2(query):
+    """
+    Command Injection likely by including text that has not been sanitized directly in
+    a shell script.
+    """
+    cmd = "grep {0} database/users.json".format(query)
+    p = subprocess.Popen(["/bin/bash", "-m", "-c", cmd], stdout=subprocess.PIPE)
+    out, err = p.communicate()
+
+    return str(out)
 
 
 def debug():
