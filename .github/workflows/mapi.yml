@@ -1,0 +1,27 @@
+name: Mayhem for API
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Start your API
+      run: python3 app.py &
+
+    - name: Run Mayhem for API to check for vulnerabilities
+      uses: ForAllSecure/mapi-action@v1
+      continue-on-error: true
+      with:
+        mapi-token: ${{ secrets.MAPI_TOKEN }}
+        api-url: http://localhost:5000 # <- update this
+        api-spec: openapi_specs/openapi3.yml
+        sarif-report: mapi.sarif
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: mapi.sarif
