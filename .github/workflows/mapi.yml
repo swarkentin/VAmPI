@@ -18,7 +18,6 @@ jobs:
       continue-on-error: true
       with:
         mapi-token: ${{ secrets.MAPI_TOKEN }}
-        organization: lampska
         api-url: http://localhost:5000
         api-spec: openapi_specs/openapi3.yml
         sarif-report: mapi.sarif
